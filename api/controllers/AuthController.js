@@ -22,19 +22,22 @@ let AuthController = {
       UserModel.findOne({email: req.body.user.email})
       .exec()
       .then( user => {
-        bcrypt.compare(user.password, req.body.user.password)
+        bcrypt.compare(req.body.user.password, user.password)
         .then( result => {
-          // create jwt token
-            let __superPrivateSecretKey = 'geromito';
-            const JWTToken = jwt.sign({
-              _id: user._id,
-              email: user.email,
-            }, __superPrivateSecretKey, {'expiresIn': '2h'});
-            
-            res.status(200).json({
-              token: JWTToken,
-            });
-          })
+          if(result) {
+            // create jwt token
+              let __superPrivateSecretKey = 'geromito';
+              const JWTToken = jwt.sign({
+                _id: user._id,
+                email: user.email,
+              }, __superPrivateSecretKey, {'expiresIn': '2h'});
+              
+              res.status(200).json({
+                token: JWTToken,
+              });
+          }
+          else res.sendStatus(401); // unauthorized access
+        })
       })
       .catch( err => {
         res.sendStatus(401); // unauthorized access
