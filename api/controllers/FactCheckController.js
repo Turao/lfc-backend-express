@@ -6,6 +6,9 @@ let FactCheckController = {
     console.log('getting factCheck of id:', req.params.id);
     
     FactCheckModel.findById(req.params.id)
+      .populate('checker')
+      .populate('statement')
+      .populate('moderator')
       .exec()
       .then( factCheck => {
         if (!factCheck) res.sendStatus(404); // not found

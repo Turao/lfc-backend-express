@@ -6,6 +6,8 @@ let StatementController = {
     console.log('getting statement of id:', req.params.id);
     
     StatementModel.findById(req.params.id)
+      .populate('politician')
+      .populate('event')
       .exec()
       .then( statement => {
         if (!statement) res.sendStatus(404); // not found

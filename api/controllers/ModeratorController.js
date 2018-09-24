@@ -6,6 +6,7 @@ let ModeratorController = {
     console.log('getting moderator of id:', req.params.id);
     
     ModeratorModel.findById(req.params.id)
+      .populate('user')
       .exec()
       .then( moderator => {
         if (!moderator) res.sendStatus(404); // not found

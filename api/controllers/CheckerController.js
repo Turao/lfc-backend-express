@@ -6,6 +6,7 @@ let CheckerController = {
     console.log('getting checker of id:', req.params.id);
     
     CheckerModel.findById(req.params.id)
+      .populate('user')
       .exec()
       .then( checker => {
         if (!checker) res.sendStatus(404); // not found

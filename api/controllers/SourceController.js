@@ -6,6 +6,7 @@ let SourceController = {
     console.log('getting source of id:', req.params.id);
     
     SourceModel.findById(req.params.id)
+      .populate('factCheck')
       .exec()
       .then( source => {
         if (!source) res.sendStatus(404); // not found

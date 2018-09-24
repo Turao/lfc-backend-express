@@ -6,6 +6,8 @@ let PoliticianController = {
     console.log('getting politician of id:', req.params.id);
     
     PoliticianModel.findById(req.params.id)
+      .populate('user')
+      .populate('party')
       .exec()
       .then( politician => {
         if (!politician) res.sendStatus(404); // not found

@@ -6,6 +6,7 @@ let EventController = {
     console.log('getting event of id:', req.params.id);
     
     EventModel.findById(req.params.id)
+      .populate('organization')
       .exec()
       .then( event => {
         if (!event) res.sendStatus(404); // not found
