@@ -18,43 +18,57 @@ router.put('/checker/:id', CheckerController.update);
 router.delete('/checker/:id', CheckerController.remove);
 
 
-// const FactCheckController = require('../api/controllers/FactCheckController');
-// router.get('/factChecks/:id', FactCheckController.get);
-// router.post('/factChecks/:id', FactCheckController.create);
-// router.put('/factChecks/:id', FactCheckController.update);
-// router.delete('/factChecks/:id', FactCheckController.remove);
+const FactCheckController = require('../api/controllers/FactCheckController');
+router.get('/factCheck/:id', FactCheckController.get);
+router.post('/factCheck/', FactCheckController.create);
+router.put('/factCheck/:id', FactCheckController.update);
+router.delete('/factCheck/:id', FactCheckController.remove);
 
 
 
 
-// const PoliticianController = require('../api/controllers/PoliticianController');
-// router.get('/politicians/:id', PoliticianController.get);
-// router.post('/politicians/:id', PoliticianController.create);
-// router.put('/politicians/:id', PoliticianController.update);
-// router.delete('/politicians/:id', PoliticianController.remove);
+const PartyController = require('../api/controllers/PartyController');
+router.get('/party/:id', PartyController.get);
+router.post('/party/', PartyController.create);
+router.put('/party/:id', PartyController.update);
+router.delete('/party/:id', PartyController.remove);
 
 
-// const StatementController = require('../api/controllers/StatementController');
-// router.get('/statements/:id', StatementController.get);
-// router.post('/statements/:id', StatementController.create);
-// router.put('/statements/:id', StatementController.update);
-// router.delete('/statements/:id', StatementController.remove);
+const PoliticianController = require('../api/controllers/PoliticianController');
+router.get('/politician/:id', PoliticianController.get);
+router.post('/politician/', PoliticianController.create);
+router.put('/politician/:id', PoliticianController.update);
+router.delete('/politician/:id', PoliticianController.remove);
+
+
+const StatementController = require('../api/controllers/StatementController');
+router.get('/statement/:id', StatementController.get);
+router.post('/statement/', StatementController.create);
+router.put('/statement/:id', StatementController.update);
+router.delete('/statement/:id', StatementController.remove);
 
 
 
 
-// const ModeratorController = require('../api/controllers/ModeratorController');
-// router.get('/moderators/:id', ModeratorController.get);
-// router.post('/moderators/:id', ModeratorController.create);
-// router.put('/moderators/:id', ModeratorController.update);
-// router.delete('/moderators/:id', ModeratorController.remove);
+const OrganizationController = require('../api/controllers/OrganizationController');
+router.get('/organization/:id', OrganizationController.get);
+router.post('/organization/', OrganizationController.create);
+router.put('/organization/:id', OrganizationController.update);
+router.delete('/organization/:id', OrganizationController.remove);
 
 
-// const EventController = require('../api/controllers/EventController');
-// router.get('/events/:id', EventController.get);
-// router.post('/events/:id', EventController.create);
-// router.put('/events/:id', EventController.update);
-// router.delete('/events/:id', EventController.remove);
+const ModeratorController = require('../api/controllers/ModeratorController');
+router.get('/moderator/:id', ModeratorController.get);
+router.post('/moderator/', ModeratorController.create);
+router.put('/moderator/:id', ModeratorController.update);
+router.delete('/moderator/:id', ModeratorController.remove);
+
+
+const EventController = require('../api/controllers/EventController');
+router.get('/event/:id', EventController.get);
+router.post('/event/', EventController.create);
+router.put('/event/:id', EventController.update);
+router.delete('/event/:id', EventController.remove);
 
 
 
