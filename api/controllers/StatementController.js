@@ -35,7 +35,8 @@ let StatementController = {
     console.log('updating statement of id:', req.params.id);
     
     let statement = req.body.statement;
-    StatementModel.updateOne({_id: req.params.id}, statement).exec()
+    StatementModel.updateOne({_id: req.params.id}, statement)
+    .exec()
     .then( statement => {
       res.sendStatus(200); // ok
     })
@@ -48,7 +49,8 @@ let StatementController = {
   remove: function (req, res) {
     console.log('removing statement of id:', req.params.id);
     
-    StatementModel.remove({_id: req.params.id}).exec()
+    StatementModel.remove({_id: req.params.id})
+    .exec()
     .then( statement => {
       res.sendStatus(200); // ok
     })

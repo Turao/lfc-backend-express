@@ -35,7 +35,8 @@ let OrganizationController = {
     console.log('updating organization of id:', req.params.id);
     
     let organization = req.body.organization;
-    OrganizationModel.updateOne({_id: req.params.id}, organization).exec()
+    OrganizationModel.updateOne({_id: req.params.id}, organization)
+    .exec()
     .then( organization => {
       res.sendStatus(200); // ok
     })
@@ -48,7 +49,8 @@ let OrganizationController = {
   remove: function (req, res) {
     console.log('removing organization of id:', req.params.id);
     
-    OrganizationModel.remove({_id: req.params.id}).exec()
+    OrganizationModel.remove({_id: req.params.id})
+    .exec()
     .then( organization => {
       res.sendStatus(200); // ok
     })

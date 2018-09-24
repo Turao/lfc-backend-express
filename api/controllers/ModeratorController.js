@@ -35,7 +35,8 @@ let ModeratorController = {
     console.log('updating moderator of id:', req.params.id);
     
     let moderator = req.body.moderator;
-    ModeratorModel.updateOne({_id: req.params.id}, moderator).exec()
+    ModeratorModel.updateOne({_id: req.params.id}, moderator)
+    .exec()
     .then( moderator => {
       res.sendStatus(200); // ok
     })
@@ -48,7 +49,8 @@ let ModeratorController = {
   remove: function (req, res) {
     console.log('removing moderator of id:', req.params.id);
     
-    ModeratorModel.remove({_id: req.params.id}).exec()
+    ModeratorModel.remove({_id: req.params.id})
+    .exec()
     .then( moderator => {
       res.sendStatus(200); // ok
     })

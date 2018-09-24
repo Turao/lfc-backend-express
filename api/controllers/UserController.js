@@ -35,7 +35,8 @@ let UserController = {
     console.log('updating user of id:', req.params.id);
     
     let user = req.body.user;
-    UserModel.updateOne({_id: req.params.id}, user).exec()
+    UserModel.updateOne({_id: req.params.id}, user)
+    .exec()
     .then( user => {
       res.sendStatus(200); // ok
     })
@@ -48,7 +49,8 @@ let UserController = {
   remove: function (req, res) {
     console.log('removing user of id:', req.params.id);
     
-    UserModel.remove({_id: req.params.id}).exec()
+    UserModel.remove({_id: req.params.id})
+    .exec()
     .then( user => {
       res.sendStatus(200); // ok
     })

@@ -35,7 +35,8 @@ let PartyController = {
     console.log('updating party of id:', req.params.id);
     
     let party = req.body.party;
-    PartyModel.updateOne({_id: req.params.id}, party).exec()
+    PartyModel.updateOne({_id: req.params.id}, party)
+    .exec()
     .then( party => {
       res.sendStatus(200); // ok
     })
@@ -48,7 +49,8 @@ let PartyController = {
   remove: function (req, res) {
     console.log('removing party of id:', req.params.id);
     
-    PartyModel.remove({_id: req.params.id}).exec()
+    PartyModel.remove({_id: req.params.id})
+    .exec()
     .then( party => {
       res.sendStatus(200); // ok
     })

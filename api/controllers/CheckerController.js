@@ -35,7 +35,8 @@ let CheckerController = {
     console.log('updating checker of id:', req.params.id);
     
     let checker = req.body.checker;
-    CheckerModel.updateOne({_id: req.params.id}, checker).exec()
+    CheckerModel.updateOne({_id: req.params.id}, checker)
+    .exec()
     .then( checker => {
       res.sendStatus(200); // ok
     })
@@ -48,7 +49,8 @@ let CheckerController = {
   remove: function (req, res) {
     console.log('removing checker of id:', req.params.id);
     
-    CheckerModel.remove({_id: req.params.id}).exec()
+    CheckerModel.remove({_id: req.params.id})
+    .exec()
     .then( checker => {
       res.sendStatus(200); // ok
     })

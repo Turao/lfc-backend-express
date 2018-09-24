@@ -35,7 +35,8 @@ let SourceController = {
     console.log('updating source of id:', req.params.id);
     
     let source = req.body.source;
-    SourceModel.updateOne({_id: req.params.id}, source).exec()
+    SourceModel.updateOne({_id: req.params.id}, source)
+    .exec()
     .then( source => {
       res.sendStatus(200); // ok
     })
@@ -48,7 +49,8 @@ let SourceController = {
   remove: function (req, res) {
     console.log('removing source of id:', req.params.id);
     
-    SourceModel.remove({_id: req.params.id}).exec()
+    SourceModel.remove({_id: req.params.id})
+    .exec()
     .then( source => {
       res.sendStatus(200); // ok
     })

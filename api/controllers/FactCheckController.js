@@ -35,7 +35,8 @@ let FactCheckController = {
     console.log('updating factCheck of id:', req.params.id);
     
     let factCheck = req.body.factCheck;
-    FactCheckModel.updateOne({_id: req.params.id}, factCheck).exec()
+    FactCheckModel.updateOne({_id: req.params.id}, factCheck)
+    .exec()
     .then( factCheck => {
       res.sendStatus(200); // ok
     })
@@ -48,7 +49,8 @@ let FactCheckController = {
   remove: function (req, res) {
     console.log('removing factCheck of id:', req.params.id);
     
-    FactCheckModel.remove({_id: req.params.id}).exec()
+    FactCheckModel.remove({_id: req.params.id})
+    .exec()
     .then( factCheck => {
       res.sendStatus(200); // ok
     })

@@ -35,7 +35,8 @@ let PoliticianController = {
     console.log('updating politician of id:', req.params.id);
     
     let politician = req.body.politician;
-    PoliticianModel.updateOne({_id: req.params.id}, politician).exec()
+    PoliticianModel.updateOne({_id: req.params.id}, politician)
+    .exec()
     .then( politician => {
       res.sendStatus(200); // ok
     })
@@ -48,7 +49,8 @@ let PoliticianController = {
   remove: function (req, res) {
     console.log('removing politician of id:', req.params.id);
     
-    PoliticianModel.remove({_id: req.params.id}).exec()
+    PoliticianModel.remove({_id: req.params.id})
+    .exec()
     .then( politician => {
       res.sendStatus(200); // ok
     })

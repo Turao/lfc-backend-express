@@ -35,7 +35,8 @@ let EventController = {
     console.log('updating event of id:', req.params.id);
     
     let event = req.body.event;
-    EventModel.updateOne({_id: req.params.id}, event).exec()
+    EventModel.updateOne({_id: req.params.id}, event)
+    .exec()
     .then( event => {
       res.sendStatus(200); // ok
     })
@@ -48,7 +49,8 @@ let EventController = {
   remove: function (req, res) {
     console.log('removing event of id:', req.params.id);
     
-    EventModel.remove({_id: req.params.id}).exec()
+    EventModel.remove({_id: req.params.id})
+    .exec()
     .then( event => {
       res.sendStatus(200); // ok
     })
