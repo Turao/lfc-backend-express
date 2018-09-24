@@ -1,5 +1,5 @@
 'use strict'
-const politicianModel = require('../models/politicianModel');
+const PoliticianModel = require('../models/PoliticianModel');
 const UserModel = require('../models/UserModel');
 
 
@@ -7,7 +7,7 @@ let PoliticianController = {
   get: function (req, res) {
     console.log('getting politician of id:', req.params.id);
     
-    politicianModel.findById(req.params.id, (err, politician) => {
+    PoliticianModel.findById(req.params.id, (err, politician) => {
       if (err) {
         res.sendStatus(400); // bad request
         return
@@ -35,7 +35,7 @@ let PoliticianController = {
       
       let politician = req.body.politician;
       politician.user = user;
-      politicianModel.create(politician, (err, politician) => {
+      PoliticianModel.create(politician, (err, politician) => {
         if(err) { 
           res.sendStatus(400); // bad request
           return
@@ -61,7 +61,7 @@ let PoliticianController = {
       
       let politician = req.body.politician;
       politician.user = user;
-      politicianModel.update({_id: req.params.id}, politician, (err, politician) => {
+      PoliticianModel.update({_id: req.params.id}, politician, (err, politician) => {
         if(err) { 
           res.sendStatus(400); // bad request
           return
@@ -77,7 +77,7 @@ let PoliticianController = {
   remove: function (req, res) {
     console.log('removing politician of id:', req.params.id);
     
-    politicianModel.remove({_id: req.params.id}, (err, politician) => {
+    PoliticianModel.remove({_id: req.params.id}, (err, politician) => {
       if(err) { 
         res.sendStatus(400); // bad request
         return

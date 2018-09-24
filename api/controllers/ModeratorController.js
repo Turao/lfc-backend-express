@@ -7,7 +7,7 @@ let ModeratorController = {
   get: function (req, res) {
     console.log('getting moderator of id:', req.params.id);
     
-    moderatorModel.findById(req.params.id, (err, moderator) => {
+    ModeratorModel.findById(req.params.id, (err, moderator) => {
       if (err) {
         res.sendStatus(400); // bad request
         return
@@ -35,7 +35,7 @@ let ModeratorController = {
       
       let moderator = req.body.moderator;
       moderator.user = user;
-      moderatorModel.create(moderator, (err, moderator) => {
+      ModeratorModel.create(moderator, (err, moderator) => {
         if(err) { 
           res.sendStatus(400); // bad request
           return
@@ -61,7 +61,7 @@ let ModeratorController = {
       
       let moderator = req.body.moderator;
       moderator.user = user;
-      moderatorModel.update({_id: req.params.id}, moderator, (err, moderator) => {
+      ModeratorModel.update({_id: req.params.id}, moderator, (err, moderator) => {
         if(err) { 
           res.sendStatus(400); // bad request
           return
@@ -77,7 +77,7 @@ let ModeratorController = {
   remove: function (req, res) {
     console.log('removing moderator of id:', req.params.id);
     
-    moderatorModel.remove({_id: req.params.id}, (err, moderator) => {
+    ModeratorModel.remove({_id: req.params.id}, (err, moderator) => {
       if(err) { 
         res.sendStatus(400); // bad request
         return
