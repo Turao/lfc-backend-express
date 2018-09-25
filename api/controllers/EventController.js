@@ -2,6 +2,19 @@
 const EventModel = require('../models/EventModel');
 
 let EventController = {
+  getLatest: function(req, res) {
+    console.log('getting latest events');
+    EventModel.find({}, null, {sort : {'created_at': -1}, limit: 20})
+      .populate('organization', 'name')
+      .then( events => {
+        res.status(200).json({events});
+      })
+      .catch( err => {
+        res.sendStatus(500); // internal error
+      })
+  },
+
+
   get: function (req, res) {
     console.log('getting event of id:', req.params.id);
     
