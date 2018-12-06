@@ -42,7 +42,7 @@ let AuthController = {
 
   authorize: function (req, res, next) {
     jwt.verify(req.headers.token, 'geromito', function(err, decoded) {
-      if (err) { 
+      if (err) {
         res.sendStatus(401); // unauthorized access
       }
       else {

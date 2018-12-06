@@ -9,7 +9,11 @@ let UserController = {
       .exec()
       .then( user => {
         if (!user) res.sendStatus(404); // not found
-        else res.json(user);
+        else {
+          user = user.toObject(); // otherwise cannot delete mongoose object properties
+          delete user.password;
+          res.json(user);
+        } 
       })
       .catch( err => {
         res.sendStatus(400); // bad request

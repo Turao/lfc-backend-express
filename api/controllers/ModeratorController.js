@@ -24,9 +24,10 @@ let ModeratorController = {
     let moderator = req.body.moderator;
     ModeratorModel.create(moderator)
       .then( moderator => {
-        res.sendStatus(200); // ok
+        res.sendStatus(200); // ok   
       })
       .catch( err => {
+        console.error(err);
         res.sendStatus(400); // bad request
       })
   },

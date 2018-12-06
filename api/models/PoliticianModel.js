@@ -9,8 +9,8 @@ const PoliticianSchema = new Schema({
   // belongs to
   party: { type: Schema.Types.ObjectId, ref: 'parties', required: true },
 
-  // has many
-  statements: [{ type: Schema.Types.ObjectId, ref: 'statements' }],
+  // // has many
+  // statements: [{ type: Schema.Types.ObjectId, ref: 'statements' }],
 });
 
 module.exports = mongoose.model('politicians', PoliticianSchema)

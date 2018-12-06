@@ -38,7 +38,7 @@ let EventController = {
     EventModel.create(event)
       .then( event => {
         res.sendStatus(200); // ok
-      })
+        })
       .catch( err => {
         res.sendStatus(400); // bad request
       })

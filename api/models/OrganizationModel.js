@@ -8,8 +8,8 @@ const OrganizationSchema = new Schema({
     lowercase: true,
   },
   
-  // has many
-  events: [{ type: Schema.Types.ObjectId, ref: 'events' }]
+  // // has many
+  // events: [{ type: Schema.Types.ObjectId, ref: 'events' }]
 });
 
 module.exports = mongoose.model('organizations', OrganizationSchema)

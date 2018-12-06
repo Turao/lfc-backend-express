@@ -19,8 +19,8 @@ const StatementSchema = new Schema({
   // belongs to
   event: { type: Schema.Types.ObjectId, ref: 'events', required: true },
 
-  // has many
-  factChecks: [{ type: Schema.Types.ObjectId, ref: 'factChecks' }],
+  // // has many
+  // factChecks: [{ type: Schema.Types.ObjectId, ref: 'factChecks' }],
 })
 
 module.exports = mongoose.model('statements', StatementSchema)

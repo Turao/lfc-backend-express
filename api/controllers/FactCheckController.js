@@ -9,6 +9,7 @@ let FactCheckController = {
       .populate('checker')
       .populate('statement')
       .populate('moderator')
+      .populate('source')
       .exec()
       .then( factCheck => {
         if (!factCheck) res.sendStatus(404); // not found

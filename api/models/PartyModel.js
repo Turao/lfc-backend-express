@@ -15,8 +15,8 @@ const PartySchema = new Schema({
     unique: false, // is it possible for two parties to have the same abbreviation?    
   },
   
-  // has many
-  politicians: [{ type: Schema.Types.ObjectId, ref: 'politicians' }],
+  // // has many
+  // politicians: [{ type: Schema.Types.ObjectId, ref: 'politicians' }],
 });
 
 module.exports = mongoose.model('parties', PartySchema)

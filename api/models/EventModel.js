@@ -16,11 +16,11 @@ const EventSchema = new Schema({
   // belongs to
   organization: { type: Schema.Types.ObjectId, ref: 'organizations', required: true },
 
-  // has many
-  moderators: [{ type: Schema.Types.ObjectId, ref: 'moderators' }],
+  // // has many
+  // moderators: [{ type: Schema.Types.ObjectId, ref: 'moderators' }],
 
-  // has many
-  statements: [{ type: Schema.Types.ObjectId, ref: 'statements' }],
+  // // has many
+  // statements: [{ type: Schema.Types.ObjectId, ref: 'statements' }],
 });
 
 module.exports = mongoose.model('events', EventSchema)
