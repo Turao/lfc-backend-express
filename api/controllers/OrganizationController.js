@@ -2,6 +2,18 @@
 const OrganizationModel = require('../models/OrganizationModel');
 
 let OrganizationController = {
+  getAll: function(req, res) {
+    console.log('getting all organizations');
+    OrganizationModel.find({}, null, {sort : {'created_at': -1}})
+      .then( organizations => {
+        res.status(200).json({organizations});
+      })
+      .catch( err => {
+        res.sendStatus(500); // internal error
+      })
+  },
+
+
   get: function (req, res) {
     console.log('getting organization of id:', req.params.id);
     

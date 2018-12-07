@@ -87,6 +87,7 @@ const OrganizationController = require('../api/controllers/OrganizationControlle
 
 // user-only
 router.use('/organization', AuthController.authorize);
+router.get('/organizations/', OrganizationController.getAll);
 router.get('/organization/:id', OrganizationController.get);
 router.post('/organization/', OrganizationController.create);
 router.put('/organization/:id', OrganizationController.update);
@@ -106,7 +107,7 @@ router.delete('/moderator/:id', ModeratorController.remove);
 
 const EventController = require('../api/controllers/EventController');
 // public
-router.get('/events/latest', EventController.getLatest);
+router.get('/events/', EventController.getLatest);
 
 // user-only
 router.use('/event', AuthController.authorize);
