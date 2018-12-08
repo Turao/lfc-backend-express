@@ -1,14 +1,12 @@
-'use strict'
 const express = require('express');
-const router = express.Router();
 
+const router = express.Router();
 
 
 const AuthController = require('../api/controllers/AuthController');
 // public
 router.post('/signup', AuthController.signup);
 router.post('/login', AuthController.login);
-
 
 
 const UserController = require('../api/controllers/UserController');
@@ -20,7 +18,6 @@ router.get('/user/:id', UserController.get);
 router.post('/user/', UserController.create);
 router.put('/user/:id', UserController.update);
 router.delete('/user/:id', UserController.remove);
-
 
 
 const CheckerController = require('../api/controllers/CheckerController');
@@ -43,8 +40,6 @@ router.get('/factCheck/:id', FactCheckController.get);
 router.post('/factCheck/', FactCheckController.create);
 router.put('/factCheck/:id', FactCheckController.update);
 router.delete('/factCheck/:id', FactCheckController.remove);
-
-
 
 
 const PartyController = require('../api/controllers/PartyController');
@@ -80,8 +75,6 @@ router.put('/statement/:id', StatementController.update);
 router.delete('/statement/:id', StatementController.remove);
 
 
-
-
 const OrganizationController = require('../api/controllers/OrganizationController');
 // public
 
@@ -115,7 +108,6 @@ router.get('/event/:id', EventController.get);
 router.post('/event/', EventController.create);
 router.put('/event/:id', EventController.update);
 router.delete('/event/:id', EventController.remove);
-
 
 
 module.exports = router;

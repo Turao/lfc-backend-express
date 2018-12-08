@@ -1,67 +1,63 @@
-'use strict'
 const SourceModel = require('../models/SourceModel');
 
-let SourceController = {
-  get: function (req, res) {
+const SourceController = {
+  get: (req, res) => {
     console.log('getting source of id:', req.params.id);
-    
+
     SourceModel.findById(req.params.id)
       .populate('factCheck')
       .exec()
-      .then( source => {
+      .then((source) => {
         if (!source) res.sendStatus(404); // not found
         else res.json(source);
       })
-      .catch( err => {
+      .catch(() => {
         res.sendStatus(400); // bad request
-      })
+      });
   },
 
 
-  create: function (req, res) {
+  create: (req, res) => {
     console.log('creating source:', req.body.source);
 
-    let source = req.body.source;
+    const { source } = req.body;
     SourceModel.create(source)
-      .then( source => {
+      .then(() => {
         res.sendStatus(200); // ok
       })
-      .catch( err => {
+      .catch(() => {
         res.sendStatus(400); // bad request
-      })
+      });
   },
 
 
-  update: function (req, res) {
+  update: (req, res) => {
     console.log('updating source of id:', req.params.id);
-    
-    let source = req.body.source;
-    SourceModel.updateOne({_id: req.params.id}, source)
-    .exec()
-    .then( source => {
-      res.sendStatus(200); // ok
-    })
-    .catch( err => {
-      res.sendStatus(400); // bad request
-    })
+
+    const { source } = req.body;
+    SourceModel.updateOne({ _id: req.params.id }, source)
+      .exec()
+      .then(() => {
+        res.sendStatus(200); // ok
+      })
+      .catch(() => {
+        res.sendStatus(400); // bad request
+      });
   },
 
-  
-  remove: function (req, res) {
+
+  remove: (req, res) => {
     console.log('removing source of id:', req.params.id);
-    
-    SourceModel.remove({_id: req.params.id})
-    .exec()
-    .then( source => {
-      res.sendStatus(200); // ok
-    })
-    .catch( err => {
-      res.sendStatus(400); // bad request
-    })
+
+    SourceModel.remove({ _id: req.params.id })
+      .exec()
+      .then(() => {
+        res.sendStatus(200); // ok
+      })
+      .catch(() => {
+        res.sendStatus(400); // bad request
+      });
   },
-
-
-}
-
+};
 
 module.exports = SourceController;

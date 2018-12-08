@@ -4,9 +4,10 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
 
-let apiRoutes = require('./routes/api');
+const mongoose = require('mongoose');
+const apiRoutes = require('./routes/api');
 
-let app = express();
+const app = express();
 
 app.use(cors());
 app.use(logger('dev'));
@@ -15,15 +16,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-
-
 app.use('/api', apiRoutes);
 
-const mongoose = require('mongoose');
 // mongodb://<dbuser>:<dbpassword>@ds239047.mlab.com:39047/lfc-backend
 // user: geromel
 // pwd: gremio123
-let db = mongoose.connect('mongodb://geromel:gremio123@ds239047.mlab.com:39047/lfc-backend');
+mongoose.connect('mongodb://geromel:gremio123@ds239047.mlab.com:39047/lfc-backend');
 
 
 module.exports = app;

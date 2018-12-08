@@ -1,70 +1,68 @@
-'use strict'
 const UserModel = require('../models/UserModel');
 
-let UserController = {
-  get: function (req, res) {
+const UserController = {
+  get: (req, res) => {
     console.log('getting user of id:', req.params.id);
-    
+
     UserModel.findById(req.params.id)
       .exec()
-      .then( user => {
+      .then((user) => {
         if (!user) res.sendStatus(404); // not found
         else {
+          // eslint-disable-next-line no-param-reassign
           user = user.toObject(); // otherwise cannot delete mongoose object properties
+          // eslint-disable-next-line no-param-reassign
           delete user.password;
           res.json(user);
-        } 
+        }
       })
-      .catch( err => {
+      .catch(() => {
         res.sendStatus(400); // bad request
-      })
+      });
   },
 
 
-  create: function (req, res) {
+  create: (req, res) => {
     console.log('creating user:', req.body.user);
 
-    let user = req.body.user;
+    const { user } = req.body;
     UserModel.create(user)
-      .then( user => {
+      .then(() => {
         res.sendStatus(200); // ok
       })
-      .catch( err => {
+      .catch(() => {
         res.sendStatus(400); // bad request
-      })
+      });
   },
 
 
-  update: function (req, res) {
+  update: (req, res) => {
     console.log('updating user of id:', req.params.id);
-    
-    let user = req.body.user;
-    UserModel.updateOne({_id: req.params.id}, user)
-    .exec()
-    .then( user => {
-      res.sendStatus(200); // ok
-    })
-    .catch( err => {
-      res.sendStatus(400); // bad request
-    })
+
+    const { user } = req.body;
+    UserModel.updateOne({ _id: req.params.id }, user)
+      .exec()
+      .then(() => {
+        res.sendStatus(200); // ok
+      })
+      .catch(() => {
+        res.sendStatus(400); // bad request
+      });
   },
 
-  
-  remove: function (req, res) {
+
+  remove: (req, res) => {
     console.log('removing user of id:', req.params.id);
-    
-    UserModel.remove({_id: req.params.id})
-    .exec()
-    .then( user => {
-      res.sendStatus(200); // ok
-    })
-    .catch( err => {
-      res.sendStatus(400); // bad request
-    })
+
+    UserModel.remove({ _id: req.params.id })
+      .exec()
+      .then(() => {
+        res.sendStatus(200); // ok
+      })
+      .catch(() => {
+        res.sendStatus(400); // bad request
+      });
   },
-
-
-}
-
+};
 
 module.exports = UserController;

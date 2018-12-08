@@ -1,7 +1,6 @@
-'use strict'
 const mongoose = require('mongoose');
 
-const Schema = mongoose.Schema;
+const { Schema } = mongoose;
 const SourceSchema = new Schema({
   url: {
     type: String,
@@ -12,4 +11,4 @@ const SourceSchema = new Schema({
   factCheck: { type: Schema.Types.ObjectId, ref: 'factChecks', required: true },
 });
 
-module.exports = mongoose.model('sources', SourceSchema)
+module.exports = mongoose.model('sources', SourceSchema);

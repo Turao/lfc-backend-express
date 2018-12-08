@@ -1,68 +1,64 @@
-'use strict'
 const PoliticianModel = require('../models/PoliticianModel');
 
-let PoliticianController = {
-  get: function (req, res) {
+const PoliticianController = {
+  get: (req, res) => {
     console.log('getting politician of id:', req.params.id);
-    
+
     PoliticianModel.findById(req.params.id)
       .populate('user')
       .populate('party')
       .exec()
-      .then( politician => {
+      .then((politician) => {
         if (!politician) res.sendStatus(404); // not found
         else res.json(politician);
       })
-      .catch( err => {
+      .catch(() => {
         res.sendStatus(400); // bad request
-      })
+      });
   },
 
 
-  create: function (req, res) {
+  create: (req, res) => {
     console.log('creating politician:', req.body.politician);
 
-    let politician = req.body.politician;
+    const { politician } = req.body;
     PoliticianModel.create(politician)
-      .then( politician => {
+      .then(() => {
         res.sendStatus(200); // ok
       })
-      .catch( err => {
+      .catch(() => {
         res.sendStatus(400); // bad request
-      })
+      });
   },
 
 
-  update: function (req, res) {
+  update: (req, res) => {
     console.log('updating politician of id:', req.params.id);
-    
-    let politician = req.body.politician;
-    PoliticianModel.updateOne({_id: req.params.id}, politician)
-    .exec()
-    .then( politician => {
-      res.sendStatus(200); // ok
-    })
-    .catch( err => {
-      res.sendStatus(400); // bad request
-    })
+
+    const { politician } = req.body;
+    PoliticianModel.updateOne({ _id: req.params.id }, politician)
+      .exec()
+      .then(() => {
+        res.sendStatus(200); // ok
+      })
+      .catch(() => {
+        res.sendStatus(400); // bad request
+      });
   },
 
-  
-  remove: function (req, res) {
+
+  remove: (req, res) => {
     console.log('removing politician of id:', req.params.id);
-    
-    PoliticianModel.remove({_id: req.params.id})
-    .exec()
-    .then( politician => {
-      res.sendStatus(200); // ok
-    })
-    .catch( err => {
-      res.sendStatus(400); // bad request
-    })
+
+    PoliticianModel.remove({ _id: req.params.id })
+      .exec()
+      .then(() => {
+        res.sendStatus(200); // ok
+      })
+      .catch(() => {
+        res.sendStatus(400); // bad request
+      });
   },
-
-
-}
-
+};
 
 module.exports = PoliticianController;

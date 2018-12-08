@@ -1,80 +1,76 @@
-'use strict'
 const EventModel = require('../models/EventModel');
 
-let EventController = {
-  getLatest: function(req, res) {
+const EventController = {
+  getLatest: (req, res) => {
     console.log('getting latest events');
-    EventModel.find({}, null, {sort : {'created_at': -1}, limit: 20})
+    EventModel.find({}, null, { sort: { created_at: -1 }, limit: 20 })
       .populate('organization', 'name')
-      .then( events => {
-        res.status(200).json({events});
+      .then((events) => {
+        res.status(200).json({ events });
       })
-      .catch( err => {
+      .catch(() => {
         res.sendStatus(500); // internal error
-      })
+      });
   },
 
 
-  get: function (req, res) {
+  get: (req, res) => {
     console.log('getting event of id:', req.params.id);
-    
+
     EventModel.findById(req.params.id)
       .populate('organization')
       .exec()
-      .then( event => {
+      .then((event) => {
         if (!event) res.sendStatus(404); // not found
         else res.json(event);
       })
-      .catch( err => {
+      .catch(() => {
         res.sendStatus(400); // bad request
-      })
+      });
   },
 
 
-  create: function (req, res) {
+  create: (req, res) => {
     console.log('creating event:', req.body.event);
 
-    let event = req.body.event;
+    const { event } = req.body;
     EventModel.create(event)
-      .then( event => {
+      .then(() => {
         res.sendStatus(200); // ok
-        })
-      .catch( err => {
-        res.sendStatus(400); // bad request
       })
+      .catch(() => {
+        res.sendStatus(400); // bad request
+      });
   },
 
 
-  update: function (req, res) {
+  update: (req, res) => {
     console.log('updating event of id:', req.params.id);
-    
-    let event = req.body.event;
-    EventModel.updateOne({_id: req.params.id}, event)
-    .exec()
-    .then( event => {
-      res.sendStatus(200); // ok
-    })
-    .catch( err => {
-      res.sendStatus(400); // bad request
-    })
+
+    const { event } = req.body;
+    EventModel.updateOne({ _id: req.params.id }, event)
+      .exec()
+      .then(() => {
+        res.sendStatus(200); // ok
+      })
+      .catch(() => {
+        res.sendStatus(400); // bad request
+      });
   },
 
-  
-  remove: function (req, res) {
+
+  remove: (req, res) => {
     console.log('removing event of id:', req.params.id);
-    
-    EventModel.remove({_id: req.params.id})
-    .exec()
-    .then( event => {
-      res.sendStatus(200); // ok
-    })
-    .catch( err => {
-      res.sendStatus(400); // bad request
-    })
+
+    EventModel.remove({ _id: req.params.id })
+      .exec()
+      .then(() => {
+        res.sendStatus(200); // ok
+      })
+      .catch(() => {
+        res.sendStatus(400); // bad request
+      });
   },
-
-
-}
-
+};
 
 module.exports = EventController;

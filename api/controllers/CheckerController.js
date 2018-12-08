@@ -1,67 +1,63 @@
-'use strict'
 const CheckerModel = require('../models/CheckerModel');
 
-let CheckerController = {
-  get: function (req, res) {
+const CheckerController = {
+  get: (req, res) => {
     console.log('getting checker of id:', req.params.id);
-    
+
     CheckerModel.findById(req.params.id)
       .populate('user')
       .exec()
-      .then( checker => {
+      .then((checker) => {
         if (!checker) res.sendStatus(404); // not found
         else res.json(checker);
       })
-      .catch( err => {
+      .catch(() => {
         res.sendStatus(400); // bad request
-      })
+      });
   },
 
 
-  create: function (req, res) {
+  create: (req, res) => {
     console.log('creating checker:', req.body.checker);
 
-    let checker = req.body.checker;
+    const { checker } = req.body;
     CheckerModel.create(checker)
-      .then( checker => {
+      .then(() => {
         res.sendStatus(200); // ok
       })
-      .catch( err => {
+      .catch(() => {
         res.sendStatus(400); // bad request
-      })
+      });
   },
 
 
-  update: function (req, res) {
+  update: (req, res) => {
     console.log('updating checker of id:', req.params.id);
-    
-    let checker = req.body.checker;
-    CheckerModel.updateOne({_id: req.params.id}, checker)
-    .exec()
-    .then( checker => {
-      res.sendStatus(200); // ok
-    })
-    .catch( err => {
-      res.sendStatus(400); // bad request
-    })
+
+    const { checker } = req.body;
+    CheckerModel.updateOne({ _id: req.params.id }, checker)
+      .exec()
+      .then(() => {
+        res.sendStatus(200); // ok
+      })
+      .catch(() => {
+        res.sendStatus(400); // bad request
+      });
   },
 
-  
-  remove: function (req, res) {
+
+  remove: (req, res) => {
     console.log('removing checker of id:', req.params.id);
-    
-    CheckerModel.remove({_id: req.params.id})
-    .exec()
-    .then( checker => {
-      res.sendStatus(200); // ok
-    })
-    .catch( err => {
-      res.sendStatus(400); // bad request
-    })
+
+    CheckerModel.remove({ _id: req.params.id })
+      .exec()
+      .then(() => {
+        res.sendStatus(200); // ok
+      })
+      .catch(() => {
+        res.sendStatus(400); // bad request
+      });
   },
-
-
-}
-
+};
 
 module.exports = CheckerController;

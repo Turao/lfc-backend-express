@@ -1,7 +1,6 @@
-'use strict'
 const mongoose = require('mongoose');
 
-const Schema = mongoose.Schema;
+const { Schema } = mongoose;
 const EventSchema = new Schema({
   name: {
     type: String,
@@ -10,7 +9,7 @@ const EventSchema = new Schema({
 
   date: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
 
   // belongs to
@@ -23,4 +22,4 @@ const EventSchema = new Schema({
   // statements: [{ type: Schema.Types.ObjectId, ref: 'statements' }],
 });
 
-module.exports = mongoose.model('events', EventSchema)
+module.exports = mongoose.model('events', EventSchema);

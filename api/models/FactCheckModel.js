@@ -1,9 +1,8 @@
-'use strict'
 const mongoose = require('mongoose');
 
-const Schema = mongoose.Schema;
+const { Schema } = mongoose;
 const FactCheckSchema = new Schema({
-    comment: {
+  comment: {
     type: String,
     lowercase: true,
   },
@@ -30,4 +29,4 @@ const FactCheckSchema = new Schema({
   source: { type: Schema.Types.ObjectId, ref: 'sources' },
 });
 
-module.exports = mongoose.model('factChecks', FactCheckSchema)
+module.exports = mongoose.model('factChecks', FactCheckSchema);

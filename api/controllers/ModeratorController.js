@@ -1,68 +1,64 @@
-'use strict'
 const ModeratorModel = require('../models/ModeratorModel');
 
-let ModeratorController = {
-  get: function (req, res) {
+const ModeratorController = {
+  get: (req, res) => {
     console.log('getting moderator of id:', req.params.id);
-    
+
     ModeratorModel.findById(req.params.id)
       .populate('user')
       .exec()
-      .then( moderator => {
+      .then((moderator) => {
         if (!moderator) res.sendStatus(404); // not found
         else res.json(moderator);
       })
-      .catch( err => {
+      .catch(() => {
         res.sendStatus(400); // bad request
-      })
+      });
   },
 
 
-  create: function (req, res) {
+  create: (req, res) => {
     console.log('creating moderator:', req.body.moderator);
 
-    let moderator = req.body.moderator;
+    const { moderator } = req.body;
     ModeratorModel.create(moderator)
-      .then( moderator => {
-        res.sendStatus(200); // ok   
+      .then(() => {
+        res.sendStatus(200); // ok
       })
-      .catch( err => {
+      .catch((err) => {
         console.error(err);
         res.sendStatus(400); // bad request
-      })
+      });
   },
 
 
-  update: function (req, res) {
+  update: (req, res) => {
     console.log('updating moderator of id:', req.params.id);
-    
-    let moderator = req.body.moderator;
-    ModeratorModel.updateOne({_id: req.params.id}, moderator)
-    .exec()
-    .then( moderator => {
-      res.sendStatus(200); // ok
-    })
-    .catch( err => {
-      res.sendStatus(400); // bad request
-    })
+
+    const { moderator } = req.body;
+    ModeratorModel.updateOne({ _id: req.params.id }, moderator)
+      .exec()
+      .then(() => {
+        res.sendStatus(200); // ok
+      })
+      .catch(() => {
+        res.sendStatus(400); // bad request
+      });
   },
 
-  
-  remove: function (req, res) {
+
+  remove: (req, res) => {
     console.log('removing moderator of id:', req.params.id);
-    
-    ModeratorModel.remove({_id: req.params.id})
-    .exec()
-    .then( moderator => {
-      res.sendStatus(200); // ok
-    })
-    .catch( err => {
-      res.sendStatus(400); // bad request
-    })
+
+    ModeratorModel.remove({ _id: req.params.id })
+      .exec()
+      .then(() => {
+        res.sendStatus(200); // ok
+      })
+      .catch(() => {
+        res.sendStatus(400); // bad request
+      });
   },
-
-
-}
-
+};
 
 module.exports = ModeratorController;
