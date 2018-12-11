@@ -19,6 +19,18 @@ const FactCheckController = {
       });
   },
 
+  getAll: (req, res) => {
+    console.log('getting all factChecks');
+    FactCheckModel.find({}, null, { sort: { created_at: -1 } })
+      // .populate('user', '-password')
+      .then((factChecks) => {
+        res.status(200).json(factChecks);
+      })
+      .catch(() => {
+        res.sendStatus(500); // internal error
+      });
+  },
+
 
   create: (req, res) => {
     console.log('creating factCheck:', req.body.factCheck);

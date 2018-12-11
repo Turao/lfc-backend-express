@@ -16,6 +16,18 @@ const PartyController = {
   },
 
 
+  getAll: (req, res) => {
+    console.log('getting all parties');
+    PartyModel.find({}, null, { sort: { created_at: -1 } })
+      .then((parties) => {
+        res.status(200).json(parties);
+      })
+      .catch(() => {
+        res.sendStatus(500); // internal error
+      });
+  },
+
+
   create: (req, res) => {
     console.log('creating party:', req.body.party);
 

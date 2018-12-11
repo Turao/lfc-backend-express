@@ -6,7 +6,20 @@ const EventController = {
     EventModel.find({}, null, { sort: { created_at: -1 }, limit: 20 })
       .populate('organization', 'name')
       .then((events) => {
-        res.status(200).json({ events });
+        res.status(200).json(events);
+      })
+      .catch(() => {
+        res.sendStatus(500); // internal error
+      });
+  },
+
+
+  getAll: (req, res) => {
+    console.log('getting all events');
+    EventModel.find({}, null, { sort: { created_at: -1 } })
+      .populate('organization', 'name')
+      .then((events) => {
+        res.status(200).json(events);
       })
       .catch(() => {
         res.sendStatus(500); // internal error

@@ -16,6 +16,18 @@ const ModeratorController = {
       });
   },
 
+  getAll: (req, res) => {
+    console.log('getting all moderators');
+    ModeratorModel.find({}, null, { sort: { created_at: -1 } })
+      .populate('user', '-password')
+      .then((moderators) => {
+        res.status(200).json(moderators);
+      })
+      .catch(() => {
+        res.sendStatus(500); // internal error
+      });
+  },
+
 
   create: (req, res) => {
     console.log('creating moderator:', req.body.moderator);

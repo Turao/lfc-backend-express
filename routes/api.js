@@ -25,6 +25,7 @@ const CheckerController = require('../api/controllers/CheckerController');
 
 // user-only
 router.use('/checker', AuthController.authorize);
+router.get('/checkers/', CheckerController.getAll);
 router.get('/checker/:id', CheckerController.get);
 router.post('/checker/', CheckerController.create);
 router.put('/checker/:id', CheckerController.update);
@@ -36,6 +37,7 @@ const FactCheckController = require('../api/controllers/FactCheckController');
 
 // user-only
 router.use('/factCheck', AuthController.authorize);
+router.get('/factChecks/', FactCheckController.getAll);
 router.get('/factCheck/:id', FactCheckController.get);
 router.post('/factCheck/', FactCheckController.create);
 router.put('/factCheck/:id', FactCheckController.update);
@@ -47,6 +49,7 @@ const PartyController = require('../api/controllers/PartyController');
 
 // user-only
 router.use('/party', AuthController.authorize);
+router.get('/parties/', PartyController.getAll);
 router.get('/party/:id', PartyController.get);
 router.post('/party/', PartyController.create);
 router.put('/party/:id', PartyController.update);
@@ -58,6 +61,7 @@ const PoliticianController = require('../api/controllers/PoliticianController');
 
 // user-only
 router.use('/politician', AuthController.authorize);
+router.get('/politicians/', PoliticianController.getAll);
 router.get('/politician/:id', PoliticianController.get);
 router.post('/politician/', PoliticianController.create);
 router.put('/politician/:id', PoliticianController.update);
@@ -69,6 +73,7 @@ const StatementController = require('../api/controllers/StatementController');
 
 // user-only
 router.use('/statement', AuthController.authorize);
+router.get('/statements/', StatementController.getAll);
 router.get('/statement/:id', StatementController.get);
 router.post('/statement/', StatementController.create);
 router.put('/statement/:id', StatementController.update);
@@ -92,6 +97,7 @@ const ModeratorController = require('../api/controllers/ModeratorController');
 
 // user-only
 router.use('/moderator', AuthController.authorize);
+router.get('/moderators/', ModeratorController.getAll);
 router.get('/moderator/:id', ModeratorController.get);
 router.post('/moderator/', ModeratorController.create);
 router.put('/moderator/:id', ModeratorController.update);
@@ -104,6 +110,7 @@ router.get('/events/', EventController.getLatest);
 
 // user-only
 router.use('/event', AuthController.authorize);
+router.get('/event/', EventController.getAll);
 router.get('/event/:id', EventController.get);
 router.post('/event/', EventController.create);
 router.put('/event/:id', EventController.update);

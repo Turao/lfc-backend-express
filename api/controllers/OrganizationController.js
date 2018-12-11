@@ -1,18 +1,6 @@
 const OrganizationModel = require('../models/OrganizationModel');
 
 const OrganizationController = {
-  getAll: (req, res) => {
-    console.log('getting all organizations');
-    OrganizationModel.find({}, null, { sort: { created_at: -1 } })
-      .then((organizations) => {
-        res.status(200).json({ organizations });
-      })
-      .catch(() => {
-        res.sendStatus(500); // internal error
-      });
-  },
-
-
   get: (req, res) => {
     console.log('getting organization of id:', req.params.id);
 
@@ -24,6 +12,18 @@ const OrganizationController = {
       })
       .catch(() => {
         res.sendStatus(400); // bad request
+      });
+  },
+
+
+  getAll: (req, res) => {
+    console.log('getting all organizations');
+    OrganizationModel.find({}, null, { sort: { created_at: -1 } })
+      .then((organizations) => {
+        res.status(200).json(organizations);
+      })
+      .catch(() => {
+        res.sendStatus(500); // internal error
       });
   },
 

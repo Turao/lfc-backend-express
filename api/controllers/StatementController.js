@@ -18,6 +18,18 @@ const StatementController = {
   },
 
 
+  getAll: (req, res) => {
+    console.log('getting all statements');
+    StatementModel.find({}, null, { sort: { created_at: -1 } })
+      .then((statements) => {
+        res.status(200).json(statements);
+      })
+      .catch(() => {
+        res.sendStatus(500); // internal error
+      });
+  },
+
+
   create: (req, res) => {
     console.log('creating statement:', req.body.statement);
 

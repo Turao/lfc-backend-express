@@ -18,6 +18,19 @@ const PoliticianController = {
   },
 
 
+  getAll: (req, res) => {
+    console.log('getting all politicians');
+    PoliticianModel.find({}, null, { sort: { created_at: -1 } })
+      .populate('user', '-password')
+      .then((politicians) => {
+        res.status(200).json(politicians);
+      })
+      .catch(() => {
+        res.sendStatus(500); // internal error
+      });
+  },
+
+
   create: (req, res) => {
     console.log('creating politician:', req.body.politician);
 

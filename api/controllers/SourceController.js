@@ -17,6 +17,18 @@ const SourceController = {
   },
 
 
+  getAll: (req, res) => {
+    console.log('getting all sources');
+    SourceModel.find({}, null, { sort: { created_at: -1 } })
+      .then((sources) => {
+        res.status(200).json(sources);
+      })
+      .catch(() => {
+        res.sendStatus(500); // internal error
+      });
+  },
+
+
   create: (req, res) => {
     console.log('creating source:', req.body.source);
 
