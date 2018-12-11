@@ -15,6 +15,18 @@ const OrganizationController = {
       });
   },
 
+  findByName: (req, res) => {
+    console.log('getting all organizations matching:', req.params.name);
+    const { name } = req.params;
+    OrganizationModel.find({ name: { $regex: new RegExp(name, 'i') } })
+      .sort({ created_at: -1 })
+      .then((organizations) => {
+        res.status(200).json(organizations);
+      })
+      .catch(() => {
+        res.sendStatus(500); // internal error
+      });
+  },
 
   getAll: (req, res) => {
     console.log('getting all organizations');

@@ -86,6 +86,7 @@ const OrganizationController = require('../api/controllers/OrganizationControlle
 // user-only
 router.use('/organization', AuthController.authorize);
 router.get('/organizations/', OrganizationController.getAll);
+router.get('/organizations/searchByName/:name', OrganizationController.findByName);
 router.get('/organization/:id', OrganizationController.get);
 router.post('/organization/', OrganizationController.create);
 router.put('/organization/:id', OrganizationController.update);
