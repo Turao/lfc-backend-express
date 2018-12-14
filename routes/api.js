@@ -9,18 +9,6 @@ router.post('/signup', AuthController.signup);
 router.post('/login', AuthController.login);
 
 
-const CheckerController = require('../api/controllers/CheckerController');
-// public
-
-// user-only
-router.use('/checker', AuthController.authorize);
-router.get('/checkers/', CheckerController.getAll);
-router.get('/checker/:id', CheckerController.get);
-router.post('/checker/', CheckerController.create);
-router.put('/checker/:id', CheckerController.update);
-router.delete('/checker/:id', CheckerController.remove);
-
-
 const EventController = require('../api/controllers/EventController');
 // public
 router.get('/events/', EventController.getAll);
@@ -45,18 +33,6 @@ router.get('/factCheck/:id', FactCheckController.get);
 router.post('/factCheck/', FactCheckController.create);
 router.put('/factCheck/:id', FactCheckController.update);
 router.delete('/factCheck/:id', FactCheckController.remove);
-
-
-const ModeratorController = require('../api/controllers/ModeratorController');
-// public
-
-// user-only
-router.use('/moderator', AuthController.authorize);
-router.get('/moderators/', ModeratorController.getAll);
-router.get('/moderator/:id', ModeratorController.get);
-router.post('/moderator/', ModeratorController.create);
-router.put('/moderator/:id', ModeratorController.update);
-router.delete('/moderator/:id', ModeratorController.remove);
 
 
 const OrganizationController = require('../api/controllers/OrganizationController');

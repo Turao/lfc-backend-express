@@ -48,6 +48,7 @@ const EventController = {
 
     EventModel.findById(req.params.id)
       .populate('organization')
+      .populate('moderators')
       .exec()
       .then((event) => {
         if (!event) res.sendStatus(404); // not found

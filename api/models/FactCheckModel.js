@@ -17,7 +17,7 @@ const FactCheckSchema = new Schema({
   },
 
   // belongs to
-  checker: { type: Schema.Types.ObjectId, ref: 'checkers', required: true },
+  checker: { type: Schema.Types.ObjectId, ref: 'users', required: true },
 
   // belongs to
   statement: { type: Schema.Types.ObjectId, ref: 'statements', required: true },
