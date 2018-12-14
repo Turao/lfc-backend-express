@@ -13,7 +13,7 @@ const EventSchema = new Schema({
   },
 
   // belongs to
-  organization: { type: Schema.Types.ObjectId, ref: 'organizations', required: true },
+  organizations: [{ type: Schema.Types.ObjectId, ref: 'organizations', required: true }],
 
   // has many
   moderators: [{ type: Schema.Types.ObjectId, ref: 'users', required: true }],

@@ -4,7 +4,7 @@ const EventController = {
   getLatest: (req, res) => {
     console.log('getting latest events');
     EventModel.find({}, null, { sort: { created_at: -1 }, limit: 10 })
-      .populate('organization')
+      .populate('organizations')
       .then((events) => {
         res.status(200).json({ events });
       })
@@ -20,7 +20,7 @@ const EventController = {
     EventModel.find({ name: { $regex: new RegExp(name, 'i') } })
       .sort({ created_at: -1 })
       .limit(5)
-      .populate('organization')
+      .populate('organizations')
       .then((events) => {
         res.status(200).json({ events });
       })
@@ -33,7 +33,7 @@ const EventController = {
   getAll: (req, res) => {
     console.log('getting all events');
     EventModel.find({}, null, { sort: { created_at: -1 } })
-      .populate('organization')
+      .populate('organizations')
       .then((events) => {
         res.status(200).json({ events });
       })
@@ -47,7 +47,7 @@ const EventController = {
     console.log('getting event of id:', req.params.id);
 
     EventModel.findById(req.params.id)
-      .populate('organization')
+      .populate('organizations')
       .populate('moderators')
       .exec()
       .then((event) => {
