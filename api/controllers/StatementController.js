@@ -10,7 +10,7 @@ const StatementController = {
       .exec()
       .then((statement) => {
         if (!statement) res.sendStatus(404); // not found
-        else res.json(statement);
+        else res.json({ statement });
       })
       .catch(() => {
         res.sendStatus(400); // bad request
@@ -21,8 +21,10 @@ const StatementController = {
   getAll: (req, res) => {
     console.log('getting all statements');
     StatementModel.find({}, null, { sort: { created_at: -1 } })
+      .populate('politician')
+      .populate('event')
       .then((statements) => {
-        res.status(200).json(statements);
+        res.status(200).json({ statements });
       })
       .catch(() => {
         res.sendStatus(500); // internal error
@@ -35,8 +37,9 @@ const StatementController = {
 
     const { statement } = req.body;
     StatementModel.create(statement)
-      .then(() => {
-        res.sendStatus(200); // ok
+      // eslint-disable-next-line no-shadow
+      .then((statement) => {
+        res.status(200).send({ statement }); // ok
       })
       .catch(() => {
         res.sendStatus(400); // bad request

@@ -9,7 +9,7 @@ const SourceController = {
       .exec()
       .then((source) => {
         if (!source) res.sendStatus(404); // not found
-        else res.json(source);
+        else res.json({ source });
       })
       .catch(() => {
         res.sendStatus(400); // bad request
@@ -20,8 +20,9 @@ const SourceController = {
   getAll: (req, res) => {
     console.log('getting all sources');
     SourceModel.find({}, null, { sort: { created_at: -1 } })
+      .populate('factCheck')
       .then((sources) => {
-        res.status(200).json(sources);
+        res.status(200).json({ sources });
       })
       .catch(() => {
         res.sendStatus(500); // internal error
@@ -34,8 +35,9 @@ const SourceController = {
 
     const { source } = req.body;
     SourceModel.create(source)
-      .then(() => {
-        res.sendStatus(200); // ok
+      // eslint-disable-next-line no-shadow
+      .then((source) => {
+        res.status(200).send({ source }); // ok
       })
       .catch(() => {
         res.sendStatus(400); // bad request

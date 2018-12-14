@@ -3,10 +3,26 @@ const EventModel = require('../models/EventModel');
 const EventController = {
   getLatest: (req, res) => {
     console.log('getting latest events');
-    EventModel.find({}, null, { sort: { created_at: -1 }, limit: 20 })
-      .populate('organization', 'name')
+    EventModel.find({}, null, { sort: { created_at: -1 }, limit: 10 })
+      .populate('organization')
       .then((events) => {
-        res.status(200).json(events);
+        res.status(200).json({ events });
+      })
+      .catch(() => {
+        res.sendStatus(500); // internal error
+      });
+  },
+
+
+  findByName: (req, res) => {
+    console.log('getting all events matching:', req.params.name);
+    const { name } = req.params;
+    EventModel.find({ name: { $regex: new RegExp(name, 'i') } })
+      .sort({ created_at: -1 })
+      .limit(5)
+      .populate('organization')
+      .then((events) => {
+        res.status(200).json({ events });
       })
       .catch(() => {
         res.sendStatus(500); // internal error
@@ -17,9 +33,9 @@ const EventController = {
   getAll: (req, res) => {
     console.log('getting all events');
     EventModel.find({}, null, { sort: { created_at: -1 } })
-      .populate('organization', 'name')
+      .populate('organization')
       .then((events) => {
-        res.status(200).json(events);
+        res.status(200).json({ events });
       })
       .catch(() => {
         res.sendStatus(500); // internal error
@@ -35,7 +51,7 @@ const EventController = {
       .exec()
       .then((event) => {
         if (!event) res.sendStatus(404); // not found
-        else res.json(event);
+        else res.json({ event });
       })
       .catch(() => {
         res.sendStatus(400); // bad request
@@ -48,8 +64,9 @@ const EventController = {
 
     const { event } = req.body;
     EventModel.create(event)
-      .then(() => {
-        res.sendStatus(200); // ok
+      // eslint-disable-next-line no-shadow
+      .then((event) => {
+        res.status(200).send({ event }); // ok
       })
       .catch(() => {
         res.sendStatus(400); // bad request

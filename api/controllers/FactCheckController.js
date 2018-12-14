@@ -12,7 +12,7 @@ const FactCheckController = {
       .exec()
       .then((factCheck) => {
         if (!factCheck) res.sendStatus(404); // not found
-        else res.json(factCheck);
+        else res.json({ factCheck });
       })
       .catch(() => {
         res.sendStatus(400); // bad request
@@ -22,9 +22,12 @@ const FactCheckController = {
   getAll: (req, res) => {
     console.log('getting all factChecks');
     FactCheckModel.find({}, null, { sort: { created_at: -1 } })
-      // .populate('user', '-password')
+      .populate('checker')
+      .populate('statement')
+      .populate('moderator')
+      .populate('source')
       .then((factChecks) => {
-        res.status(200).json(factChecks);
+        res.status(200).json({ factChecks });
       })
       .catch(() => {
         res.sendStatus(500); // internal error
@@ -37,8 +40,9 @@ const FactCheckController = {
 
     const { factCheck } = req.body;
     FactCheckModel.create(factCheck)
-      .then(() => {
-        res.sendStatus(200); // ok
+      // eslint-disable-next-line no-shadow
+      .then((factCheck) => {
+        res.status(200).send({ factCheck }); // ok
       })
       .catch(() => {
         res.sendStatus(400); // bad request

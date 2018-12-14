@@ -9,15 +9,26 @@ const UserController = {
       .then((user) => {
         if (!user) res.sendStatus(404); // not found
         else {
-          // eslint-disable-next-line no-param-reassign
-          user = user.toObject(); // otherwise cannot delete mongoose object properties
-          // eslint-disable-next-line no-param-reassign
-          delete user.password;
-          res.json(user);
+          res.json({ user });
         }
       })
       .catch(() => {
         res.sendStatus(400); // bad request
+      });
+  },
+
+
+  findByName: (req, res) => {
+    console.log('getting all users matching:', req.params.name);
+    const { name } = req.params;
+    UserModel.find({ name: { $regex: new RegExp(name, 'i') } })
+      .sort({ created_at: -1 })
+      .limit(5)
+      .then((users) => {
+        res.status(200).json({ users });
+      })
+      .catch(() => {
+        res.sendStatus(500); // internal error
       });
   },
 
@@ -27,8 +38,13 @@ const UserController = {
 
     const { user } = req.body;
     UserModel.create(user)
-      .then(() => {
-        res.sendStatus(200); // ok
+      // eslint-disable-next-line no-shadow
+      .then((user) => {
+        // eslint-disable-next-line no-param-reassign
+        user = user.toObject();
+        // eslint-disable-next-line no-param-reassign
+        delete user.password;
+        res.status(200).send({ user }); // ok
       })
       .catch(() => {
         res.sendStatus(400); // bad request

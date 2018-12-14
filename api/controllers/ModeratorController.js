@@ -6,10 +6,11 @@ const ModeratorController = {
 
     ModeratorModel.findById(req.params.id)
       .populate('user')
+      .populate('event')
       .exec()
       .then((moderator) => {
         if (!moderator) res.sendStatus(404); // not found
-        else res.json(moderator);
+        else res.json({ moderator });
       })
       .catch(() => {
         res.sendStatus(400); // bad request
@@ -19,9 +20,10 @@ const ModeratorController = {
   getAll: (req, res) => {
     console.log('getting all moderators');
     ModeratorModel.find({}, null, { sort: { created_at: -1 } })
-      .populate('user', '-password')
+      .populate('user')
+      .populate('event')
       .then((moderators) => {
-        res.status(200).json(moderators);
+        res.status(200).json({ moderators });
       })
       .catch(() => {
         res.sendStatus(500); // internal error
@@ -34,8 +36,9 @@ const ModeratorController = {
 
     const { moderator } = req.body;
     ModeratorModel.create(moderator)
-      .then(() => {
-        res.sendStatus(200); // ok
+      // eslint-disable-next-line no-shadow
+      .then((moderator) => {
+        res.status(200).send({ moderator }); // ok
       })
       .catch((err) => {
         console.error(err);

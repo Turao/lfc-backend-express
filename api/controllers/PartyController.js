@@ -8,10 +8,25 @@ const PartyController = {
       .exec()
       .then((party) => {
         if (!party) res.sendStatus(404); // not found
-        else res.json(party);
+        else res.json({ party });
       })
       .catch(() => {
         res.sendStatus(400); // bad request
+      });
+  },
+
+
+  findByName: (req, res) => {
+    console.log('getting all parties matching:', req.params.name);
+    const { name } = req.params;
+    PartyModel.find({ name: { $regex: new RegExp(name, 'i') } })
+      .sort({ created_at: -1 })
+      .limit(5)
+      .then((parties) => {
+        res.status(200).json({ parties });
+      })
+      .catch(() => {
+        res.sendStatus(500); // internal error
       });
   },
 
@@ -20,7 +35,7 @@ const PartyController = {
     console.log('getting all parties');
     PartyModel.find({}, null, { sort: { created_at: -1 } })
       .then((parties) => {
-        res.status(200).json(parties);
+        res.status(200).json({ parties });
       })
       .catch(() => {
         res.sendStatus(500); // internal error
@@ -33,8 +48,9 @@ const PartyController = {
 
     const { party } = req.body;
     PartyModel.create(party)
-      .then(() => {
-        res.sendStatus(200); // ok
+      // eslint-disable-next-line no-shadow
+      .then((party) => {
+        res.status(200).send({ party }); // ok
       })
       .catch(() => {
         res.sendStatus(400); // bad request

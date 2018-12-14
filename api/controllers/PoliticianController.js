@@ -5,12 +5,12 @@ const PoliticianController = {
     console.log('getting politician of id:', req.params.id);
 
     PoliticianModel.findById(req.params.id)
-      .populate('user')
+      .populate('user', '-password')
       .populate('party')
       .exec()
       .then((politician) => {
         if (!politician) res.sendStatus(404); // not found
-        else res.json(politician);
+        else res.json({ politician });
       })
       .catch(() => {
         res.sendStatus(400); // bad request
@@ -18,12 +18,30 @@ const PoliticianController = {
   },
 
 
+  findByName: (req, res) => {
+    console.log('getting all politicians matching:', req.params.name);
+    const { name } = req.params;
+    PoliticianModel.find({ name: { $regex: new RegExp(name, 'i') } })
+      .sort({ created_at: -1 })
+      .limit(5)
+      .populate('user')
+      .populate('party')
+      .then((politicians) => {
+        res.status(200).json({ politicians });
+      })
+      .catch(() => {
+        res.sendStatus(500); // internal error
+      });
+  },
+
+
   getAll: (req, res) => {
     console.log('getting all politicians');
     PoliticianModel.find({}, null, { sort: { created_at: -1 } })
-      .populate('user', '-password')
+      .populate('user')
+      .populate('party')
       .then((politicians) => {
-        res.status(200).json(politicians);
+        res.status(200).json({ politicians });
       })
       .catch(() => {
         res.sendStatus(500); // internal error
@@ -36,8 +54,9 @@ const PoliticianController = {
 
     const { politician } = req.body;
     PoliticianModel.create(politician)
-      .then(() => {
-        res.sendStatus(200); // ok
+      // eslint-disable-next-line no-shadow
+      .then((politician) => {
+        res.status(200).send({ politician }); // ok
       })
       .catch(() => {
         res.sendStatus(400); // bad request

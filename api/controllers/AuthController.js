@@ -18,18 +18,25 @@ const AuthController = {
 
   login: async (req, res) => {
     try {
-      const user = await UserModel.findOne({ email: req.body.user.email }).exec();
+      let user = await UserModel.findOne({ email: req.body.user.email })
+        .select('+password')
+        .exec();
       const isSamePassword = await bcrypt.compare(req.body.user.password, user.password);
+
+      user = user.toObject();
+      delete user.password;
+
       if (isSamePassword) {
         const superPrivateSecretKey = 'geromito';
-        const JWTToken = jwt.sign({
+        const token = jwt.sign({
           // eslint-disable-next-line no-underscore-dangle
           _id: user._id,
           email: user.email,
         }, superPrivateSecretKey, { expiresIn: '2h' });
 
         res.status(200).json({
-          token: JWTToken,
+          token,
+          user,
         });
       } else {
         throw Error('Unauthorized Access'); // unauthorized access

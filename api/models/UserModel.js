@@ -13,9 +13,10 @@ const UserSchema = new Schema({
   password: {
     type: String,
     required: true,
+    select: false,
   },
 
-  fullName: {
+  name: {
     type: String,
     required: true,
     lowercase: true,

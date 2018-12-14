@@ -5,11 +5,11 @@ const CheckerController = {
     console.log('getting checker of id:', req.params.id);
 
     CheckerModel.findById(req.params.id)
-      .populate('user', '-password')
+      .populate('user')
       .exec()
       .then((checker) => {
         if (!checker) res.sendStatus(404); // not found
-        else res.json(checker);
+        else res.json({ checker });
       })
       .catch(() => {
         res.sendStatus(400); // bad request
@@ -20,9 +20,9 @@ const CheckerController = {
   getAll: (req, res) => {
     console.log('getting all checkers');
     CheckerModel.find({}, null, { sort: { created_at: -1 } })
-      .populate('user', '-password')
+      .populate('user')
       .then((checkers) => {
-        res.status(200).json(checkers);
+        res.status(200).json({ checkers });
       })
       .catch(() => {
         res.sendStatus(500); // internal error
@@ -35,8 +35,9 @@ const CheckerController = {
 
     const { checker } = req.body;
     CheckerModel.create(checker)
-      .then(() => {
-        res.sendStatus(200); // ok
+      // eslint-disable-next-line no-shadow
+      .then((checker) => {
+        res.status(200).send({ checker }); // ok
       })
       .catch(() => {
         res.sendStatus(400); // bad request
