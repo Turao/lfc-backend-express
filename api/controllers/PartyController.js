@@ -1,89 +1,89 @@
 const PartyModel = require('../models/PartyModel');
 
+const UserModel = require('../models/UserModel'); // has many relatinship
+
 const PartyController = {
-  get: (req, res) => {
+  getAll: async (req, res) => {
+    console.log('getting all parties');
+    try {
+      const parties = await PartyModel.find({}, null, { sort: { created_at: -1 } })
+        .exec();
+      res.status(200).json({ parties });
+    } catch (err) {
+      res.sendStatus(500); // internal error
+    }
+  },
+
+
+  findByName: async (req, res) => {
+    console.log('getting all parties matching:', req.params.name);
+    try {
+      const { name } = req.params;
+      const parties = PartyModel.find({ name: { $regex: new RegExp(name, 'i') } })
+        .sort({ created_at: -1 })
+        .limit(5)
+        .exec();
+      res.status(200).json({ parties });
+    } catch (err) {
+      res.sendStatus(400); // bad request
+    }
+  },
+
+
+  get: async (req, res) => {
     console.log('getting party of id:', req.params.id);
 
-    PartyModel.findById(req.params.id)
-      .exec()
-      .then((party) => {
-        if (!party) res.sendStatus(404); // not found
-        else res.json({ party });
-      })
-      .catch(() => {
-        res.sendStatus(400); // bad request
-      });
+    try {
+      const party = PartyModel.findById(req.params.id)
+        .exec();
+      if (!party) res.sendStatus(404); // not found
+      else {
+        // fill 'has many' reference arrays
+        const politicians = await UserModel.find({ party: party.id });
+        party.politicians = politicians;
+        res.json({ party });
+      }
+    } catch (err) {
+      res.sendStatus(400); // bad request
+    }
   },
 
 
-  findByName: (req, res) => {
-    console.log('getting all parties matching:', req.params.name);
-    const { name } = req.params;
-    PartyModel.find({ name: { $regex: new RegExp(name, 'i') } })
-      .sort({ created_at: -1 })
-      .limit(5)
-      .then((parties) => {
-        res.status(200).json({ parties });
-      })
-      .catch(() => {
-        res.sendStatus(500); // internal error
-      });
-  },
-
-
-  getAll: (req, res) => {
-    console.log('getting all parties');
-    PartyModel.find({}, null, { sort: { created_at: -1 } })
-      .then((parties) => {
-        res.status(200).json({ parties });
-      })
-      .catch(() => {
-        res.sendStatus(500); // internal error
-      });
-  },
-
-
-  create: (req, res) => {
+  create: async (req, res) => {
     console.log('creating party:', req.body.party);
 
-    const { party } = req.body;
-    PartyModel.create(party)
-      // eslint-disable-next-line no-shadow
-      .then((party) => {
-        res.status(200).send({ party }); // ok
-      })
-      .catch(() => {
-        res.sendStatus(400); // bad request
-      });
+    try {
+      let { party } = req.body;
+      party = await PartyModel.create(party);
+      res.send({ party });
+    } catch (err) {
+      res.sendStatus(400); // bad request
+    }
   },
 
 
-  update: (req, res) => {
+  update: async (req, res) => {
     console.log('updating party of id:', req.params.id);
 
-    const { party } = req.body;
-    PartyModel.updateOne({ _id: req.params.id }, party)
-      .exec()
-      .then(() => {
-        res.sendStatus(200); // ok
-      })
-      .catch(() => {
-        res.sendStatus(400); // bad request
-      });
+    try {
+      const { party } = req.body;
+      await PartyModel.findByIdAndUpdate(req.params.id, party).exec();
+      res.sendStatus(200); // ok
+    } catch (err) {
+      res.sendStatus(400); // bad request
+    }
   },
 
 
-  remove: (req, res) => {
+  remove: async (req, res) => {
     console.log('removing party of id:', req.params.id);
 
-    PartyModel.remove({ _id: req.params.id })
-      .exec()
-      .then(() => {
-        res.sendStatus(200); // ok
-      })
-      .catch(() => {
-        res.sendStatus(400); // bad request
-      });
+    try {
+      await PartyModel.findByIdAndRemove(req.params.id).exec();
+      res.sendStatus(200); // ok
+    } catch (err) {
+      res.sendStatus(400); // bad request
+    }
   },
 };
 

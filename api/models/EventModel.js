@@ -4,7 +4,10 @@ const { Schema } = mongoose;
 const EventSchema = new Schema({
   name: {
     type: String,
-    lowecase: true,
+    lowercase: true,
+    minlength: 1,
+    maxlength: 64,
+    required: true,
   },
 
   date: {
@@ -13,13 +16,13 @@ const EventSchema = new Schema({
   },
 
   // belongs to
-  organizations: [{ type: Schema.Types.ObjectId, ref: 'organizations', required: true }],
+  organization: { type: Schema.Types.ObjectId, ref: 'organizations', required: true },
 
   // has many
   moderators: [{ type: Schema.Types.ObjectId, ref: 'users', required: true }],
 
   // // has many
-  // statements: [{ type: Schema.Types.ObjectId, ref: 'statements' }],
+  statements: [{ type: Schema.Types.ObjectId, ref: 'statements' }],
 });
 
 module.exports = mongoose.model('events', EventSchema);

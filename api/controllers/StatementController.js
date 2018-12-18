@@ -1,78 +1,78 @@
 const StatementModel = require('../models/StatementModel');
 
+const FactCheckModel = require('../models/FactCheckModel'); // has many relationship
+
 const StatementController = {
-  get: (req, res) => {
+  getAll: async (req, res) => {
+    console.log('getting all statements');
+    try {
+      const statements = await StatementModel.find({}, null, { sort: { created_at: -1 } })
+        .populate('politician')
+        .populate('event')
+        .exec();
+      res.status(200).json({ statements });
+    } catch (err) {
+      res.sendStatus(500); // internal error
+    }
+  },
+
+
+  get: async (req, res) => {
     console.log('getting statement of id:', req.params.id);
 
-    StatementModel.findById(req.params.id)
-      .populate('politician')
-      .populate('event')
-      .exec()
-      .then((statement) => {
-        if (!statement) res.sendStatus(404); // not found
-        else res.json({ statement });
-      })
-      .catch(() => {
-        res.sendStatus(400); // bad request
-      });
+    try {
+      const statement = StatementModel.findById(req.params.id)
+        .populate('politician')
+        .populate('event')
+        .exec();
+      if (!statement) res.sendStatus(404); // not found
+      else {
+        // fill 'has many' reference arrays
+        const factChecks = await FactCheckModel.find({ statement: statement.id });
+        statement.factChecks = factChecks;
+        res.json({ statement });
+      }
+    } catch (err) {
+      res.sendStatus(400); // bad request
+    }
   },
 
 
-  getAll: (req, res) => {
-    console.log('getting all statements');
-    StatementModel.find({}, null, { sort: { created_at: -1 } })
-      .populate('politician')
-      .populate('event')
-      .then((statements) => {
-        res.status(200).json({ statements });
-      })
-      .catch(() => {
-        res.sendStatus(500); // internal error
-      });
-  },
-
-
-  create: (req, res) => {
+  create: async (req, res) => {
     console.log('creating statement:', req.body.statement);
 
-    const { statement } = req.body;
-    StatementModel.create(statement)
-      // eslint-disable-next-line no-shadow
-      .then((statement) => {
-        res.status(200).send({ statement }); // ok
-      })
-      .catch(() => {
-        res.sendStatus(400); // bad request
-      });
+    try {
+      let { statement } = req.body;
+      statement = await StatementModel.create(statement);
+      res.send({ statement });
+    } catch (err) {
+      res.sendStatus(400); // bad request
+    }
   },
 
 
-  update: (req, res) => {
+  update: async (req, res) => {
     console.log('updating statement of id:', req.params.id);
 
-    const { statement } = req.body;
-    StatementModel.updateOne({ _id: req.params.id }, statement)
-      .exec()
-      .then(() => {
-        res.sendStatus(200); // ok
-      })
-      .catch(() => {
-        res.sendStatus(400); // bad request
-      });
+    try {
+      const { statement } = req.body;
+      await StatementModel.findByIdAndUpdate(req.params.id, statement).exec();
+      res.sendStatus(200); // ok
+    } catch (err) {
+      res.sendStatus(400); // bad request
+    }
   },
 
 
-  remove: (req, res) => {
+  remove: async (req, res) => {
     console.log('removing statement of id:', req.params.id);
 
-    StatementModel.remove({ _id: req.params.id })
-      .exec()
-      .then(() => {
-        res.sendStatus(200); // ok
-      })
-      .catch(() => {
-        res.sendStatus(400); // bad request
-      });
+    try {
+      await StatementModel.findByIdAndRemove(req.params.id).exec();
+      res.sendStatus(200); // ok
+    } catch (err) {
+      res.sendStatus(400); // bad request
+    }
   },
 };
 

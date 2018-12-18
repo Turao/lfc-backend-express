@@ -5,11 +5,23 @@ const FactCheckSchema = new Schema({
   comment: {
     type: String,
     lowercase: true,
+    minlength: 10,
+    maxlength: 256,
+    required: true,
   },
 
   veracity: {
     type: String,
     enum: ['True', 'False', 'Partially True'],
+    required: true,
+  },
+
+  source: {
+    type: String,
+    lowercase: true,
+    minlength: 10,
+    maxlength: 512,
+    required: true,
   },
 
   verifiedByModerator: {
@@ -24,9 +36,6 @@ const FactCheckSchema = new Schema({
 
   // belongs to
   moderator: { type: Schema.Types.ObjectId, ref: 'moderators' },
-
-  // has a
-  source: { type: Schema.Types.ObjectId, ref: 'sources' },
 });
 
 module.exports = mongoose.model('factChecks', FactCheckSchema);

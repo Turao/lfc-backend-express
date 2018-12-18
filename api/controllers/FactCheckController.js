@@ -1,81 +1,73 @@
 const FactCheckModel = require('../models/FactCheckModel');
 
 const FactCheckController = {
-  get: (req, res) => {
-    console.log('getting factCheck of id:', req.params.id);
-
-    FactCheckModel.findById(req.params.id)
-      .populate('checker')
-      .populate('statement')
-      .populate('moderator')
-      .populate('source')
-      .exec()
-      .then((factCheck) => {
-        if (!factCheck) res.sendStatus(404); // not found
-        else res.json({ factCheck });
-      })
-      .catch(() => {
-        res.sendStatus(400); // bad request
-      });
-  },
-
-  getAll: (req, res) => {
-    console.log('getting all factChecks');
-    FactCheckModel.find({}, null, { sort: { created_at: -1 } })
-      .populate('checker')
-      .populate('statement')
-      .populate('moderator')
-      .populate('source')
-      .then((factChecks) => {
-        res.status(200).json({ factChecks });
-      })
-      .catch(() => {
-        res.sendStatus(500); // internal error
-      });
+  getAll: async (req, res) => {
+    console.log('getting all factchecks');
+    try {
+      const factcheck = await FactCheckModel.find({}, null, { sort: { created_at: -1 } })
+        .populate('checker')
+        .populate('statement')
+        .populate('moderator')
+        .exec();
+      res.status(200).json({ factcheck });
+    } catch (err) {
+      res.sendStatus(500); // internal error
+    }
   },
 
 
-  create: (req, res) => {
+  get: async (req, res) => {
+    console.log('getting factcheck of id:', req.params.id);
+
+    try {
+      const factCheck = FactCheckModel.findById(req.params.id)
+        .populate('checker')
+        .populate('statement')
+        .populate('moderator')
+        .exec();
+      if (!factCheck) res.sendStatus(404); // not found
+      else res.json({ factCheck });
+    } catch (err) {
+      res.sendStatus(400); // bad request
+    }
+  },
+
+
+  create: async (req, res) => {
     console.log('creating factCheck:', req.body.factCheck);
 
-    const { factCheck } = req.body;
-    FactCheckModel.create(factCheck)
-      // eslint-disable-next-line no-shadow
-      .then((factCheck) => {
-        res.status(200).send({ factCheck }); // ok
-      })
-      .catch(() => {
-        res.sendStatus(400); // bad request
-      });
+    try {
+      let { factCheck } = req.body;
+      factCheck = await FactCheckModel.create(factCheck);
+      res.send({ factCheck });
+    } catch (err) {
+      res.sendStatus(400); // bad request
+    }
   },
 
 
-  update: (req, res) => {
+  update: async (req, res) => {
     console.log('updating factCheck of id:', req.params.id);
 
-    const { factCheck } = req.body;
-    FactCheckModel.updateOne({ _id: req.params.id }, factCheck)
-      .exec()
-      .then(() => {
-        res.sendStatus(200); // ok
-      })
-      .catch(() => {
-        res.sendStatus(400); // bad request
-      });
+    try {
+      const { factCheck } = req.body;
+      await FactCheckModel.findByIdAndUpdate(req.params.id, factCheck).exec();
+      res.sendStatus(200); // ok
+    } catch (err) {
+      res.sendStatus(400); // bad request
+    }
   },
 
 
-  remove: (req, res) => {
+  remove: async (req, res) => {
     console.log('removing factCheck of id:', req.params.id);
 
-    FactCheckModel.remove({ _id: req.params.id })
-      .exec()
-      .then(() => {
-        res.sendStatus(200); // ok
-      })
-      .catch(() => {
-        res.sendStatus(400); // bad request
-      });
+    try {
+      await FactCheckModel.findByIdAndRemove(req.params.id).exec();
+      res.sendStatus(200); // ok
+    } catch (err) {
+      res.sendStatus(400); // bad request
+    }
   },
 };
 

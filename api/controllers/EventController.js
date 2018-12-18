@@ -1,106 +1,104 @@
 const EventModel = require('../models/EventModel');
+const StatementModel = require('../models/StatementModel'); // has many relatinship
 
 const EventController = {
-  getLatest: (req, res) => {
+  getLatest: async (req, res) => {
     console.log('getting latest events');
-    EventModel.find({}, null, { sort: { created_at: -1 }, limit: 10 })
-      .populate('organizations')
-      .then((events) => {
-        res.status(200).json({ events });
-      })
-      .catch(() => {
-        res.sendStatus(500); // internal error
-      });
+    try {
+      const events = await EventModel.find({}, null, { sort: { created_at: -1 }, limit: 10})
+        .populate('organizations')
+        .exec();
+      res.status(200).json({ events });
+    } catch (err) {
+      res.sendStatus(500); // internal error
+    }
   },
 
 
-  findByName: (req, res) => {
+  findByName: async (req, res) => {
     console.log('getting all events matching:', req.params.name);
-    const { name } = req.params;
-    EventModel.find({ name: { $regex: new RegExp(name, 'i') } })
-      .sort({ created_at: -1 })
-      .limit(5)
-      .populate('organizations')
-      .then((events) => {
-        res.status(200).json({ events });
-      })
-      .catch(() => {
-        res.sendStatus(500); // internal error
-      });
+    try {
+      const { name } = req.params;
+      const events = EventModel.find({ name: { $regex: new RegExp(name, 'i') } })
+        .sort({ created_at: -1 })
+        .limit(5)
+        .populate('organizations')
+        .exec();
+      res.status(200).json({ events });
+    } catch (err) {
+      res.sendStatus(400); // bad request
+    }
   },
 
 
-  getAll: (req, res) => {
+  getAll: async (req, res) => {
     console.log('getting all events');
-    EventModel.find({}, null, { sort: { created_at: -1 } })
-      .populate('organizations')
-      .then((events) => {
-        res.status(200).json({ events });
-      })
-      .catch(() => {
-        res.sendStatus(500); // internal error
-      });
+    try {
+      const events = await EventModel.find({}, null, { sort: { created_at: -1 } })
+        .populate('organizations')
+        .exec();
+      res.status(200).json({ events });
+    } catch (err) {
+      res.sendStatus(500); // internal error
+    }
   },
 
 
-  get: (req, res) => {
+  get: async (req, res) => {
     console.log('getting event of id:', req.params.id);
 
-    EventModel.findById(req.params.id)
-      .populate('organizations')
-      .populate('moderators')
-      .exec()
-      .then((event) => {
-        if (!event) res.sendStatus(404); // not found
-        else res.json({ event });
-      })
-      .catch(() => {
-        res.sendStatus(400); // bad request
-      });
+    try {
+      const event = EventModel.findById(req.params.id)
+        .populate('organizations')
+        .exec();
+      if (!event) res.sendStatus(404); // not found
+      else {
+        // fill 'has many' reference arrays
+        const statements = await StatementModel.find({ event: event.id });
+        event.statements = statements;
+        res.json({ event });
+      }
+    } catch (err) {
+      res.sendStatus(400); // bad request
+    }
   },
 
 
-  create: (req, res) => {
+  create: async (req, res) => {
     console.log('creating event:', req.body.event);
 
-    const { event } = req.body;
-    EventModel.create(event)
-      // eslint-disable-next-line no-shadow
-      .then((event) => {
-        res.status(200).send({ event }); // ok
-      })
-      .catch(() => {
-        res.sendStatus(400); // bad request
-      });
+    try {
+      let { event } = req.body;
+      event = await EventModel.create(event);
+      res.send({ event });
+    } catch (err) {
+      res.sendStatus(400); // bad request
+    }
   },
 
 
-  update: (req, res) => {
+  update: async (req, res) => {
     console.log('updating event of id:', req.params.id);
 
-    const { event } = req.body;
-    EventModel.updateOne({ _id: req.params.id }, event)
-      .exec()
-      .then(() => {
-        res.sendStatus(200); // ok
-      })
-      .catch(() => {
-        res.sendStatus(400); // bad request
-      });
+    try {
+      const { event } = req.body;
+      await EventModel.findByIdAndUpdate(req.params.id, event).exec();
+      res.sendStatus(200); // ok
+    } catch (err) {
+      res.sendStatus(400); // bad request
+    }
   },
 
 
-  remove: (req, res) => {
+  remove: async (req, res) => {
     console.log('removing event of id:', req.params.id);
 
-    EventModel.remove({ _id: req.params.id })
-      .exec()
-      .then(() => {
-        res.sendStatus(200); // ok
-      })
-      .catch(() => {
-        res.sendStatus(400); // bad request
-      });
+    try {
+      await EventModel.findByIdAndRemove(req.params.id).exec();
+      res.sendStatus(200); // ok
+    } catch (err) {
+      res.sendStatus(400); // bad request
+    }
   },
 };
 

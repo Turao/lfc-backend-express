@@ -61,19 +61,6 @@ router.put('/party/:id', PartyController.update);
 router.delete('/party/:id', PartyController.remove);
 
 
-const PoliticianController = require('../api/controllers/PoliticianController');
-// public
-
-// user-only
-router.use('/politician', AuthController.authorize);
-router.get('/politicians/', PoliticianController.getAll);
-router.get('/politicians/searchByName/:name', PoliticianController.findByName);
-router.get('/politician/:id', PoliticianController.get);
-router.post('/politician/', PoliticianController.create);
-router.put('/politician/:id', PoliticianController.update);
-router.delete('/politician/:id', PoliticianController.remove);
-
-
 const StatementController = require('../api/controllers/StatementController');
 // public
 

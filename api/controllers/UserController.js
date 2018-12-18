@@ -1,83 +1,96 @@
 const UserModel = require('../models/UserModel');
 
+const FactCheckModel = require('../models/FactCheckModel'); // has many relatinship
+const StatementModel = require('../models/StatementModel'); // has many relatinship
+
 const UserController = {
-  get: (req, res) => {
+  getAll: async (req, res) => {
+    console.log('getting all users');
+    try {
+      const users = await UserModel.find({}, null, { sort: { created_at: -1 } })
+        .exec();
+      res.status(200).json({ users });
+    } catch (err) {
+      res.sendStatus(500); // internal error
+    }
+  },
+
+
+  findByName: async (req, res) => {
+    console.log('getting all users matching:', req.params.name);
+    try {
+      const { name } = req.params;
+      const users = UserModel.find({ name: { $regex: new RegExp(name, 'i') } })
+        .sort({ created_at: -1 })
+        .limit(5)
+        .exec();
+      res.status(200).json({ users });
+    } catch (err) {
+      res.sendStatus(400); // bad request
+    }
+  },
+
+
+  get: async (req, res) => {
     console.log('getting user of id:', req.params.id);
 
-    UserModel.findById(req.params.id)
-      .exec()
-      .then((user) => {
-        if (!user) res.sendStatus(404); // not found
-        else {
-          res.json({ user });
-        }
-      })
-      .catch(() => {
-        res.sendStatus(400); // bad request
-      });
+    try {
+      const user = UserModel.findById(req.params.id)
+        .exec();
+      if (!user) res.sendStatus(404); // not found
+      else {
+        // fill 'has many' reference arrays
+        const factChecks = await FactCheckModel.find({ checker: user.id });
+        user.factChecks = factChecks;
+
+        const moderated = await FactCheckModel.find({ moderator: user.id });
+        user.moderated = moderated;
+
+        const statements = await StatementModel.find({ politician: user.id });
+        user.statements = statements;
+        res.json({ user });
+      }
+    } catch (err) {
+      res.sendStatus(400); // bad request
+    }
   },
 
 
-  findByName: (req, res) => {
-    console.log('getting all users matching:', req.params.name);
-    const { name } = req.params;
-    UserModel.find({ name: { $regex: new RegExp(name, 'i') } })
-      .sort({ created_at: -1 })
-      .limit(5)
-      .then((users) => {
-        res.status(200).json({ users });
-      })
-      .catch(() => {
-        res.sendStatus(500); // internal error
-      });
-  },
-
-
-  create: (req, res) => {
+  create: async (req, res) => {
     console.log('creating user:', req.body.user);
 
-    const { user } = req.body;
-    UserModel.create(user)
-      // eslint-disable-next-line no-shadow
-      .then((user) => {
-        // eslint-disable-next-line no-param-reassign
-        user = user.toObject();
-        // eslint-disable-next-line no-param-reassign
-        delete user.password;
-        res.status(200).send({ user }); // ok
-      })
-      .catch(() => {
-        res.sendStatus(400); // bad request
-      });
+    try {
+      let { user } = req.body;
+      user = await UserModel.create(user);
+      res.send({ user });
+    } catch (err) {
+      res.sendStatus(400); // bad request
+    }
   },
 
 
-  update: (req, res) => {
+  update: async (req, res) => {
     console.log('updating user of id:', req.params.id);
 
-    const { user } = req.body;
-    UserModel.updateOne({ _id: req.params.id }, user)
-      .exec()
-      .then(() => {
-        res.sendStatus(200); // ok
-      })
-      .catch(() => {
-        res.sendStatus(400); // bad request
-      });
+    try {
+      const { user } = req.body;
+      await UserModel.findByIdAndUpdate(req.params.id, user).exec();
+      res.sendStatus(200); // ok
+    } catch (err) {
+      res.sendStatus(400); // bad request
+    }
   },
 
 
-  remove: (req, res) => {
+  remove: async (req, res) => {
     console.log('removing user of id:', req.params.id);
 
-    UserModel.remove({ _id: req.params.id })
-      .exec()
-      .then(() => {
-        res.sendStatus(200); // ok
-      })
-      .catch(() => {
-        res.sendStatus(400); // bad request
-      });
+    try {
+      await UserModel.findByIdAndRemove(req.params.id).exec();
+      res.sendStatus(200); // ok
+    } catch (err) {
+      res.sendStatus(400); // bad request
+    }
   },
 };
 
